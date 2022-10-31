@@ -36,6 +36,17 @@ const getSquareColor = prop("square");
 const getTriangleColor = prop("triangle");
 const getCircleColor = prop("circle");
 
+const areTwoColorsSame = (colors) => equals(...colors);
+const getTriangleAndSquare = (figures) => [
+  getTriangleColor(figures),
+  getSquareColor(figures),
+];
+
+const areTriangleAndSquareSameColors = compose(
+  areTwoColorsSame,
+  getTriangleAndSquare
+);
+
 const getLength = prop("length");
 
 const isStarRed = compose(isRed, getStarColor);
@@ -46,6 +57,8 @@ const isCircleBlue = compose(isBlue, getCircleColor);
 const isSquareGreen = compose(isGreen, getSquareColor);
 const isSquareOrange = compose(isOrange, getSquareColor);
 const isTriangleGreen = compose(isGreen, getTriangleColor);
+const isTriangleWhite = compose(isWhite, getTriangleColor);
+const isTriangleNotWhite = complement(isTriangleWhite);
 
 const getRedCount = compose(getLength, filter(isRed), Object.values);
 const getBlueCount = compose(getLength, filter(isBlue), Object.values);
@@ -126,5 +139,5 @@ export const validateFieldN9 = (figures) => {
 
 // 10. Треугольник и квадрат одного цвета (не белого), остальные – любого цвета
 export const validateFieldN10 = (figures) => {
-  return equals(getTriangleColor(figures))(getSquareColor(figures));
+  return allPass([isTriangleNotWhite, areTriangleAndSquareSameColors])(figures);
 };
