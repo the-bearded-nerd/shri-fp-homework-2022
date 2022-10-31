@@ -39,6 +39,9 @@ const getCircleColor = prop("circle");
 const getLength = prop("length");
 
 const isStarRed = compose(isRed, getStarColor);
+const isStarWhite = compose(isWhite, getStarColor);
+const isStarNotRed = complement(isStarRed);
+const isStarNotWhite = complement(isStarWhite);
 const isCircleBlue = compose(isBlue, getCircleColor);
 const isSquareGreen = compose(isGreen, getSquareColor);
 const isSquareOrange = compose(isOrange, getSquareColor);
@@ -74,8 +77,8 @@ export const validateFieldN1 = (figures) => {
 
 // 2. Как минимум две фигуры зеленые.
 export const validateFieldN2 = (figures) => {
-  const isMoreThanOneGreen = compose(isMoreThanOne, getLength, filter(isGreen));
-  console.log(isMoreThanOneGreen(figures));
+  const isMoreThanOneGreen = compose(isMoreThanOne, getGreenCount);
+
   return isMoreThanOneGreen(figures);
 };
 
@@ -113,7 +116,7 @@ export const validateFieldN7 = (figures) => {
 
 // 8. Не красная и не белая звезда, остальные – любого цвета.
 export const validateFieldN8 = (figures) => {
-  return complement(isStarRed)(figures);
+  return allPass([isStarNotRed, isStarNotWhite])(figures);
 };
 
 // 9. Все фигуры зеленые.
